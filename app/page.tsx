@@ -189,6 +189,7 @@ export default function Home() {
               </svg>
               GitHub
             </Link>
+
           </div>
           <p className="text-lg text-gray-700 mb-4 font-medium">
               公益慈善会议、竞赛和活动重要截止日期概览，不再错过参与公益事业、奉献爱心和社会服务的机会
