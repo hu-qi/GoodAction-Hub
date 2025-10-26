@@ -18,32 +18,98 @@ function SafeTranslation({ tKey, fallback }: { tKey: string; fallback: string })
 
 export default function BarrierFreeBitesPage() {
   const [filter, setFilter] = useState<"all" | "hearing" | "visual" | "wheelchair" | "cognitive">("all")
-  const [copiedPeiGe, setCopiedPeiGe] = useState(false)
+  // const [copiedPeiGe, setCopiedPeiGe] = useState(false)
   
-  const handleCopyAddress = async (text: string) => {
-    try {
-      await navigator.clipboard.writeText(text)
-      setCopiedPeiGe(true)
-      setTimeout(() => setCopiedPeiGe(false), 1500)
-    } catch {
-      const ta = document.createElement('textarea')
-      ta.value = text
-      document.body.appendChild(ta)
-      ta.select()
-      try {
-        document.execCommand('copy')
-        setCopiedPeiGe(true)
-        setTimeout(() => setCopiedPeiGe(false), 1500)
-      } finally {
-        document.body.removeChild(ta)
-      }
-    }
+  // const handleCopyAddress = async (text: string) => {
+  //   try {
+  //     await navigator.clipboard.writeText(text)
+  //     setCopiedPeiGe(true)
+  //     setTimeout(() => setCopiedPeiGe(false), 1500)
+  //   } catch {
+  //     const ta = document.createElement('textarea')
+  //     ta.value = text
+  //     document.body.appendChild(ta)
+  //     ta.select()
+  //     try {
+  //       document.execCommand('copy')
+  //       setCopiedPeiGe(true)
+  //       setTimeout(() => setCopiedPeiGe(false), 1500)
+  //     } finally {
+  //       document.body.removeChild(ta)
+  //     }
+  //   }
+  // }
+
+  // 餐厅坐标信息
+  const restaurantCoords = {
+    peige: { lat: 39.9365, lng: 116.4477, address: "北京市朝阳区三里屯太古里南区" },
+    muma: { lat: 39.9365, lng: 116.4477, address: "北京市朝阳区工体北路" },
+    starbucks: { lat: 23.1291, lng: 113.2644, address: "广州市天河区" }
   }
 
-  const openAmapNavigation = (address: string, name?: string) => {
-    const keyword = encodeURIComponent(`${name ? name + ' ' : ''}${address}`.trim())
-    const url = `https://uri.amap.com/search?keyword=${keyword}`
-    window.open(url, '_blank', 'noopener,noreferrer')
+  const [navigationLoading, setNavigationLoading] = useState<string | null>(null)
+
+  const openAmapNavigation = (restaurantKey: keyof typeof restaurantCoords, name?: string) => {
+    const restaurant = restaurantCoords[restaurantKey]
+    if (!restaurant) return
+
+    setNavigationLoading(restaurantKey)
+    
+    // 构建高德地图 APP 协议链接
+    const appUrl = `amapuri://route/plan/?dlat=${restaurant.lat}&dlon=${restaurant.lng}&dname=${encodeURIComponent(name || restaurant.address)}&dev=0&t=0`
+    
+    // 构建网页版链接作为回退
+    const webUrl = `https://uri.amap.com/navigation?to=${restaurant.lng},${restaurant.lat},${encodeURIComponent(name || restaurant.address)}&mode=car&policy=1&src=mypage`
+    
+    // 尝试打开 APP，如果失败则打开网页版
+    const tryOpenApp = () => {
+      const iframe = document.createElement('iframe')
+      iframe.style.display = 'none'
+      iframe.src = appUrl
+      document.body.appendChild(iframe)
+      
+      // 设置超时，如果 APP 没有响应则打开网页版
+      const timeout = setTimeout(() => {
+        document.body.removeChild(iframe)
+        window.open(webUrl, '_blank', 'noopener,noreferrer')
+        setNavigationLoading(null)
+      }, 2000)
+      
+      // 监听页面可见性变化，如果用户切换到其他应用说明 APP 打开成功
+      const handleVisibilityChange = () => {
+        if (document.hidden) {
+          clearTimeout(timeout)
+          document.body.removeChild(iframe)
+          document.removeEventListener('visibilitychange', handleVisibilityChange)
+          setNavigationLoading(null)
+        }
+      }
+      
+      document.addEventListener('visibilitychange', handleVisibilityChange)
+      
+      // 清理函数
+      setTimeout(() => {
+        try {
+          if (iframe.parentNode) {
+            document.body.removeChild(iframe)
+          }
+          document.removeEventListener('visibilitychange', handleVisibilityChange)
+        } catch {
+          // 忽略清理错误
+        }
+      }, 3000)
+    }
+
+    // 检测是否为移动设备
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+    
+    if (isMobile) {
+      tryOpenApp()
+    } else {
+      // 桌面端直接打开网页版
+      window.open(webUrl, '_blank', 'noopener,noreferrer')
+      setNavigationLoading(null)
+    }
   }
   const isVisible = (type: ("hearing" | "visual" | "wheelchair" | "cognitive") | Array<"hearing" | "visual" | "wheelchair" | "cognitive">) => {
     if (filter === "all") return true;
@@ -248,22 +314,32 @@ export default function BarrierFreeBitesPage() {
                     <span className="info-label"><SafeTranslation tKey="bites.labels.address" fallback="地址" /></span>
                     <span><SafeTranslation tKey="bites.restaurants.peige.address" fallback="北京市朝阳区三里屯太古里南区" /></span>
                     <button
-                      aria-label="复制地址"
-                      className="ml-2 px-2 py-[2px] rounded-md text-white bg-blue-500 hover:bg-blue-600 text-xs align-middle"
-                      onClick={() => handleCopyAddress('北京市朝阳区三里屯太古里南区')}
-                    >
-                      复制
-                    </button>
-                    <button
                       aria-label="导航"
-                      className="ml-2 px-2 py-[2px] rounded-md text-white bg-gradient-to-r from-pink-600 via-pink-500 to-purple-600 hover:brightness-110 text-xs align-middle"
-                      onClick={() => openAmapNavigation('北京市朝阳区三里屯太古里南区', '培哥烟囱面包')}
+                      className="ml-2 px-3 py-1 rounded-md text-white bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-xs align-middle transition-all duration-200 flex items-center gap-1 shadow-sm hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
+                      onClick={() => openAmapNavigation('peige', '培哥烟囱面包')}
+                      disabled={navigationLoading === 'peige'}
                     >
-                      <SafeTranslation tKey="bites.labels.navigate" fallback="导航" />
+                      {navigationLoading === 'peige' ? (
+                        <>
+                          <svg className="animate-spin h-3 w-3" viewBox="0 0 24 24">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle>
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                          </svg>
+                          <SafeTranslation tKey="bites.labels.navigating" fallback="导航中..." />
+                        </>
+                      ) : (
+                        <>
+                          <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                          </svg>
+                          <SafeTranslation tKey="bites.labels.navigate" fallback="导航" />
+                        </>
+                      )}
                     </button>
-                    {copiedPeiGe && (
+                    {/* {copiedPeiGe && (
                       <span className="ml-2 text-green-600 text-sm align-middle"><SafeTranslation tKey="bites.labels.copied" fallback="已复制" /></span>
-                    )}
+                    )} */}
                   </div>
                 </div>
               </div>
@@ -306,10 +382,27 @@ export default function BarrierFreeBitesPage() {
                     <span><SafeTranslation tKey="bites.restaurants.muma_dark.address" fallback="北京市朝阳区工体北路" /></span>
                     <button
                       aria-label="导航"
-                      className="ml-2 px-2 py-[2px] rounded-md text-white bg-gradient-to-r from-pink-600 via-pink-500 to-purple-600 hover:brightness-110 text-xs align-middle"
-                      onClick={() => openAmapNavigation('北京市朝阳区工体北路', '木马黑暗餐厅')}
+                      className="ml-2 px-3 py-1 rounded-md text-white bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-xs align-middle transition-all duration-200 flex items-center gap-1 shadow-sm hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
+                      onClick={() => openAmapNavigation('muma', '木马黑暗餐厅')}
+                      disabled={navigationLoading === 'muma'}
                     >
-                      <SafeTranslation tKey="bites.labels.navigate" fallback="导航" />
+                      {navigationLoading === 'muma' ? (
+                        <>
+                          <svg className="animate-spin h-3 w-3" viewBox="0 0 24 24">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle>
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                          </svg>
+                          <SafeTranslation tKey="bites.labels.navigating" fallback="导航中..." />
+                        </>
+                      ) : (
+                        <>
+                          <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                          </svg>
+                          <SafeTranslation tKey="bites.labels.navigate" fallback="导航" />
+                        </>
+                      )}
                     </button>
                     {copiedPeiGe && (
                       <span className="ml-2 text-green-600 text-sm align-middle"><SafeTranslation tKey="bites.labels.copied" fallback="已复制" /></span>
@@ -356,10 +449,27 @@ export default function BarrierFreeBitesPage() {
                     <span><SafeTranslation tKey="bites.restaurants.starbucks_wende.address" fallback="北京市朝阳区文德路" /></span>
                     <button
                       aria-label="导航"
-                      className="ml-2 px-2 py-[2px] rounded-md text-white bg-gradient-to-r from-pink-600 via-pink-500 to-purple-600 hover:brightness-110 text-xs align-middle"
-                      onClick={() => openAmapNavigation('北京市朝阳区文德路', '星巴克文德店')}
+                      className="ml-2 px-3 py-1 rounded-md text-white bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-xs align-middle transition-all duration-200 flex items-center gap-1 shadow-sm hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
+                      onClick={() => openAmapNavigation('starbucks_wende', '星巴克文德店')}
+                      disabled={navigationLoading === 'starbucks_wende'}
                     >
-                      <SafeTranslation tKey="bites.labels.navigate" fallback="导航" />
+                      {navigationLoading === 'starbucks_wende' ? (
+                        <>
+                          <svg className="animate-spin h-3 w-3" viewBox="0 0 24 24">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle>
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                          </svg>
+                          <SafeTranslation tKey="bites.labels.navigating" fallback="导航中..." />
+                        </>
+                      ) : (
+                        <>
+                          <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                          </svg>
+                          <SafeTranslation tKey="bites.labels.navigate" fallback="导航" />
+                        </>
+                      )}
                     </button>
                     {copiedPeiGe && (
                       <span className="ml-2 text-green-600 text-sm align-middle"><SafeTranslation tKey="bites.labels.copied" fallback="已复制" /></span>
@@ -779,10 +889,27 @@ export default function BarrierFreeBitesPage() {
                     <span><SafeTranslation tKey="bites.restaurants.starbucks_dc.address" fallback="北京市朝阳区国贸" /></span>
                     <button
                       aria-label="导航"
-                      className="ml-2 px-2 py-[2px] rounded-md text-white bg-gradient-to-r from-pink-600 via-pink-500 to-purple-600 hover:brightness-110 text-xs align-middle"
-                      onClick={() => openAmapNavigation('北京市朝阳区国贸', '星巴克DC店')}
+                      className="ml-2 px-3 py-1 rounded-md text-white bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-xs align-middle transition-all duration-200 flex items-center gap-1 shadow-sm hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
+                      onClick={() => openAmapNavigation('starbucks_dc', '星巴克DC店')}
+                      disabled={navigationLoading === 'starbucks_dc'}
                     >
-                      <SafeTranslation tKey="bites.labels.navigate" fallback="导航" />
+                      {navigationLoading === 'starbucks_dc' ? (
+                        <>
+                          <svg className="animate-spin h-3 w-3" viewBox="0 0 24 24">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle>
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                          </svg>
+                          <SafeTranslation tKey="bites.labels.navigating" fallback="导航中..." />
+                        </>
+                      ) : (
+                        <>
+                          <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                          </svg>
+                          <SafeTranslation tKey="bites.labels.navigate" fallback="导航" />
+                        </>
+                      )}
                     </button>
                     {copiedPeiGe && (
                       <span className="ml-2 text-green-600 text-sm align-middle"><SafeTranslation tKey="bites.labels.copied" fallback="已复制" /></span>
