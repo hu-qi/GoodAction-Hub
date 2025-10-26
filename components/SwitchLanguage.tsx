@@ -18,7 +18,7 @@ export function SwitchLanguage() {
         if (detected !== currentLng) {
             setCurrentLng(detected)
         }
-    }, [])
+    }, [currentLng])
 
     const handleChange = (value: string) => {
         i18next.changeLanguage(value)

@@ -7,7 +7,8 @@ import { useTranslation } from 'react-i18next'
 export default function BarrierFreeBitesPage() {
   const [filter, setFilter] = useState<"all" | "hearing" | "visual" | "wheelchair" | "cognitive">("all")
   const [copiedPeiGe, setCopiedPeiGe] = useState(false)
-  const { t, i18n } = useTranslation('translation')
+  const { t } = useTranslation('translation')
+  
   const handleCopyAddress = async (text: string) => {
     try {
       await navigator.clipboard.writeText(text)
@@ -232,6 +233,13 @@ export default function BarrierFreeBitesPage() {
                   <div className="info-item">
                     <span className="info-label">{t('bites.labels.address')}</span>
                     <span>{t('bites.restaurants.peige.address')}</span>
+                    <button
+                      aria-label="复制地址"
+                      className="ml-2 px-2 py-[2px] rounded-md text-white bg-blue-500 hover:bg-blue-600 text-xs align-middle"
+                      onClick={() => handleCopyAddress(t('bites.restaurants.peige.address'))}
+                    >
+                      复制
+                    </button>
                     <button
                       aria-label={t('bites.labels.navigate')}
                       className="ml-2 px-2 py-[2px] rounded-md text-white bg-gradient-to-r from-pink-600 via-pink-500 to-purple-600 hover:brightness-110 text-xs align-middle"
