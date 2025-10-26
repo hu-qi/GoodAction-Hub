@@ -3,12 +3,22 @@
 import i18next, { supportedLngDisplayNames } from '@/i18n/config'
 import { ChevronDownIcon } from '@radix-ui/react-icons'
 import * as Select from '@radix-ui/react-select'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { Globe } from 'lucide-react'
 
 export function SwitchLanguage() {
     const { i18n } = useTranslation()
-    const [currentLng, setCurrentLng] = useState(i18n.language)
+    const [currentLng, setCurrentLng] = useState(i18n.language || 'zh-CN')
+
+    // Ensure client and server render match by syncing after mount
+    useEffect(() => {
+        // i18next may detect a different language on the client; sync it post-mount
+        const detected = i18next.language || 'zh-CN'
+        if (detected !== currentLng) {
+            setCurrentLng(detected)
+        }
+    }, [])
 
     const handleChange = (value: string) => {
         i18next.changeLanguage(value)
@@ -21,7 +31,10 @@ export function SwitchLanguage() {
                 className="inline-flex items-center justify-between rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm focus:outline-none focus:ring-2 focus:ring-primary transition min-w-[120px]"
                 aria-label="语言"
             >
-                <Select.Value />
+                <div className="flex items-center gap-2">
+                    <Globe className="h-4 w-4 text-slate-700" aria-hidden="true" />
+                    <Select.Value placeholder={supportedLngDisplayNames[currentLng] || supportedLngDisplayNames['zh-CN']} />
+                </div>
                 <Select.Icon>
                     <ChevronDownIcon className="ml-2 h-4 w-4" />
                 </Select.Icon>

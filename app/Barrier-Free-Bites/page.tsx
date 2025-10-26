@@ -1,11 +1,48 @@
 "use client"
 
 import { useState } from "react"
+import FoodAIDialog from "@/components/FoodAIDialog"
+import { useTranslation } from 'react-i18next'
 
 export default function BarrierFreeBitesPage() {
-  const [filter, setFilter] = useState<"all" | "hearing" | "visual">("all")
+  const [filter, setFilter] = useState<"all" | "hearing" | "visual" | "wheelchair" | "cognitive">("all")
+  const [copiedPeiGe, setCopiedPeiGe] = useState(false)
+  const { t, i18n } = useTranslation('translation')
+  const handleCopyAddress = async (text: string) => {
+    try {
+      await navigator.clipboard.writeText(text)
+      setCopiedPeiGe(true)
+      setTimeout(() => setCopiedPeiGe(false), 1500)
+    } catch {
+      const ta = document.createElement('textarea')
+      ta.value = text
+      document.body.appendChild(ta)
+      ta.select()
+      try {
+        document.execCommand('copy')
+        setCopiedPeiGe(true)
+        setTimeout(() => setCopiedPeiGe(false), 1500)
+      } finally {
+        document.body.removeChild(ta)
+      }
+    }
+  }
 
-  const isVisible = (type: "hearing" | "visual") => filter === "all" || filter === type
+  const openAmapNavigation = (address: string, name?: string) => {
+    const keyword = encodeURIComponent(`${name ? name + ' ' : ''}${address}`.trim())
+    const url = `https://uri.amap.com/search?keyword=${keyword}`
+    window.open(url, '_blank', 'noopener,noreferrer')
+  }
+  const isVisible = (type: ("hearing" | "visual" | "wheelchair" | "cognitive") | Array<"hearing" | "visual" | "wheelchair" | "cognitive">) => {
+    if (filter === "all") return true;
+    const types = Array.isArray(type) ? type : [type];
+    return types.includes(filter);
+  }
+
+  const renderFeatures = (key: string) => {
+    const items = t(key, { returnObjects: true }) as unknown as string[];
+    return Array.isArray(items) ? items.map((i, idx) => <li key={idx}>{i}</li>) : null;
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-cyan-50 relative overflow-hidden">
@@ -86,6 +123,18 @@ export default function BarrierFreeBitesPage() {
           .restaurant-card { background: var(--color-surface); border: 1px solid var(--color-card-border); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-sm); transition: all 0.3s ease; display: flex; flex-direction: column; }
           .restaurant-card:hover { box-shadow: var(--shadow-md); transform: translateY(-4px); }
           .restaurant-card.hidden { display: none; }
+          /* 紧凑卡片样式，用于那伽树与无声饭店 */
+          .restaurant-card.card-compact .card-header { padding: calc(var(--space-20) * 0.75); }
+.restaurant-card.card-compact .card-body { padding: calc(var(--space-20) * 0.75); }
+.restaurant-card.card-compact .restaurant-name { font-size: calc(var(--font-size-xl) * 0.9); }
+.restaurant-card.card-compact .description { font-size: calc(var(--font-size-base) * 0.95); line-height: 1.6; }
+.restaurant-card.card-compact .features-title { font-size: calc(var(--font-size-base) * 0.95); }
+.restaurant-card.card-compact .features-list li { font-size: calc(var(--font-size-sm) * 0.95); padding: 2px 0; }
+.restaurant-card.card-compact .info-item { font-size: calc(var(--font-size-sm) * 0.95); }
+
+/* 两卡并排容器 */
+.card-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-20); align-items: stretch; }
+@media (max-width: 640px) { .card-row { grid-template-columns: 1fr; } }
           .card-header { background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 50%, var(--color-secondary) 100%); padding: var(--space-20); color: var(--color-white); }
           .restaurant-name { font-size: var(--font-size-xl); font-weight: var(--font-weight-bold); margin-bottom: var(--space-8); }
           .accessibility-tags { display: flex; gap: var(--space-8); flex-wrap: wrap; }
@@ -113,9 +162,9 @@ export default function BarrierFreeBitesPage() {
 
           <header className="header">
             <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 via-pink-600 to-cyan-600 bg-clip-text text-transparent mb-3">
-              🌟 无障碍友好美食指南
+              🌟 {t('bites.title')}
             </h1>
-            <p className="subtitle">为每个人提供平等的美食体验</p>
+            <p className="subtitle">{t('bites.subtitle')}</p>
           </header>
 
           <div className="filter-section">
@@ -123,19 +172,31 @@ export default function BarrierFreeBitesPage() {
               className={`filter-btn ${filter === 'all' ? 'active' : ''}`}
               onClick={() => setFilter('all')}
             >
-              全部餐厅
+              {t('bites.filters.all')}
             </button>
             <button
               className={`filter-btn ${filter === 'hearing' ? 'active' : ''}`}
               onClick={() => setFilter('hearing')}
             >
-              听障友好
+              {t('bites.filters.hearing')}
             </button>
             <button
               className={`filter-btn ${filter === 'visual' ? 'active' : ''}`}
               onClick={() => setFilter('visual')}
             >
-              视障友好
+              {t('bites.filters.visual')}
+            </button>
+            <button
+              className={`filter-btn ${filter === 'wheelchair' ? 'active' : ''}`}
+              onClick={() => setFilter('wheelchair')}
+            >
+              {t('bites.filters.wheelchair')}
+            </button>
+            <button
+              className={`filter-btn ${filter === 'cognitive' ? 'active' : ''}`}
+              onClick={() => setFilter('cognitive')}
+            >
+              {t('bites.filters.cognitive')}
             </button>
           </div>
 
@@ -143,58 +204,44 @@ export default function BarrierFreeBitesPage() {
             {/* 培哥烟囱面包 */}
             <div className={`restaurant-card ${isVisible('hearing') ? '' : 'hidden'}`} data-accessibility="hearing">
               <div className="card-header">
-                <h2 className="restaurant-name">培哥烟囱面包</h2>
+                <h2 className="restaurant-name">{t('bites.restaurants.peige.name')}</h2>
                 <div className="accessibility-tags">
                   <span className="tag">
                     <span className="icon">👂</span>
-                    听障友好
+                    {t('bites.tags.hearing')}
                   </span>
                 </div>
               </div>
               <div className="card-body">
-                <p className="description">
-                  一家致力于为听障人士提供温暖服务的特色面包店，以其独特的烟囱面包和无障碍沟通环境闻名。店内配备专业手语服务，让每一位顾客都能轻松点餐。
-                </p>
+                <p className="description">{t('bites.restaurants.peige.description')}</p>
                 <div className="features">
-                  <h3 className="features-title">无障碍特色</h3>
+                  <h3 className="features-title">{t('bites.labels.features')}</h3>
                   <ul className="features-list">
-                    <li>提供专业手语翻译服务</li>
-                    <li>图文并茂的菜单设计</li>
-                    <li>电子点餐系统支持</li>
-                    <li>视觉化叫号系统</li>
-                    <li>写字板辅助沟通</li>
+                    {renderFeatures('bites.restaurants.peige.features')}
                   </ul>
                 </div>
                 <div className="info-section">
                   <div className="info-item">
-                    <span className="info-label">特色美食：</span>
-                    <span>烟囱面包、欧式软包、手工点心</span>
+                    <span className="info-label">{t('bites.labels.food')}</span>
+                    <span>{t('bites.restaurants.peige.food')}</span>
                   </div>
                   <div className="info-item">
-                    <span className="info-label">服务亮点：</span>
-                    <span>聘用听障员工，营造包容氛围</span>
+                    <span className="info-label">{t('bites.labels.value')}</span>
+                    <span>{t('bites.restaurants.peige.value')}</span>
                   </div>
                   <div className="info-item">
-                    <span className="info-label">地址：</span>
-                    <span>安徽省合肥市庐阳区含山路29号105-3室</span>
-                  </div>
-                  <div className="flex gap-2 mt-2 flex-wrap">
-                    <a
-                      className="inline-flex items-center gap-1 px-3 py-1.5 rounded-md border border-white/30 bg-white/70 text-sm text-slate-700 hover:bg-gradient-to-r hover:from-purple-600 hover:via-pink-600 hover:to-cyan-600 hover:text-white transition-colors"
-                      href={`https://uri.amap.com/search?keyword=${encodeURIComponent("安徽省合肥市庐阳区含山路29号105-3室")}&city=${encodeURIComponent("合肥市")}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                    <span className="info-label">{t('bites.labels.address')}</span>
+                    <span>{t('bites.restaurants.peige.address')}</span>
+                    <button
+                      aria-label={t('bites.labels.navigate')}
+                      className="ml-2 px-2 py-[2px] rounded-md text-white bg-gradient-to-r from-pink-600 via-pink-500 to-purple-600 hover:brightness-110 text-xs align-middle"
+                      onClick={() => openAmapNavigation(t('bites.restaurants.peige.address'), t('bites.restaurants.peige.name'))}
                     >
-                      📍 打开高德地图
-                    </a>
-                    <a
-                      className="inline-flex items-center gap-1 px-3 py-1.5 rounded-md border border-white/30 bg-white/70 text-sm text-slate-700 hover:bg-gradient-to-r hover:from-purple-600 hover:via-pink-600 hover:to-cyan-600 hover:text-white transition-colors"
-                      href={`https://map.baidu.com/search/${encodeURIComponent("安徽省合肥市庐阳区含山路29号105-3室")}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      🗺️ 打开百度地图
-                    </a>
+                      {t('bites.labels.navigate')}
+                    </button>
+                    {copiedPeiGe && (
+                      <span className="ml-2 text-green-600 text-sm align-middle">{t('bites.labels.copied')}</span>
+                    )}
                   </div>
                 </div>
               </div>
@@ -203,49 +250,513 @@ export default function BarrierFreeBitesPage() {
             {/* 木马童话黑暗餐厅 */}
             <div className={`restaurant-card ${isVisible('visual') ? '' : 'hidden'}`} data-accessibility="visual">
               <div className="card-header">
-                <h2 className="restaurant-name">木马童话黑暗餐厅</h2>
+                <h2 className="restaurant-name">{t('bites.restaurants.muma_dark.name')}</h2>
                 <div className="accessibility-tags">
                   <span className="tag">
                     <span className="icon">👁️</span>
-                    视障友好
-                  </span>
-                  <span className="tag">
-                    <span className="icon">🍽️</span>
-                    日式料理
+                    {t('bites.tags.visual')}
                   </span>
                 </div>
               </div>
               <div className="card-body">
-                <p className="description">
-                  北京独特的黑暗餐厅，由曾经历视网膜脱落的外科医生于爽创办于2009年。餐厅提供完全黑暗的用餐体验，让顾客感受视障人士的世界，同时聘用视障员工提供专业服务。
-                </p>
+                <p className="description">{t('bites.restaurants.muma_dark.description')}</p>
                 <div className="features">
-                  <h3 className="features-title">无障碍特色</h3>
+                  <h3 className="features-title">{t('bites.labels.features')}</h3>
                   <ul className="features-list">
-                    <li>视障员工专业引导服务</li>
-                    <li>完全黑暗的平等用餐环境</li>
-                    <li>触觉和听觉为主的体验设计</li>
-                    <li>无障碍通道和设施</li>
-                    <li>盲文菜单和语音介绍</li>
-                    <li>在线预订系统便捷服务</li>
+                    {renderFeatures('bites.restaurants.muma_dark.features')}
                   </ul>
                 </div>
                 <div className="info-section">
                   <div className="info-item">
-                    <span className="info-label">餐厅类型：</span>
-                    <span>法国菜、日式料理、私人定制</span>
+                    <span className="info-label">{t('bites.labels.food')}</span>
+                    <span>{t('bites.restaurants.muma_dark.food')}</span>
                   </div>
                   <div className="info-item">
-                    <span className="info-label">地址：</span>
-                    <span>北京西城区西单北大街109号西西友谊酒店8层</span>
+                    <span className="info-label">{t('bites.labels.experience')}</span>
+                    <span>{t('bites.restaurants.muma_dark.experience')}</span>
                   </div>
                   <div className="info-item">
-                    <span className="info-label">特色体验：</span>
-                    <span>在黑暗中用餐，感受不同的美食维度</span>
+                    <span className="info-label">{t('bites.labels.value')}</span>
+                    <span>{t('bites.restaurants.muma_dark.value')}</span>
                   </div>
                   <div className="info-item">
-                    <span className="info-label">社会价值：</span>
-                    <span>12年来为上百名残障人士提供就业机会</span>
+                    <span className="info-label">{t('bites.labels.address')}</span>
+                    <span>{t('bites.restaurants.muma_dark.address')}</span>
+                    <button
+                      aria-label={t('bites.labels.navigate')}
+                      className="ml-2 px-2 py-[2px] rounded-md text-white bg-gradient-to-r from-pink-600 via-pink-500 to-purple-600 hover:brightness-110 text-xs align-middle"
+                      onClick={() => openAmapNavigation(t('bites.restaurants.muma_dark.address'), t('bites.restaurants.muma_dark.name'))}
+                    >
+                      {t('bites.labels.navigate')}
+                    </button>
+                    {copiedPeiGe && (
+                      <span className="ml-2 text-green-600 text-sm align-middle">{t('bites.labels.copied')}</span>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* 星巴克东方文德手语门店（广州） */}
+            <div className={`restaurant-card ${isVisible('hearing') ? '' : 'hidden'}`} data-accessibility="hearing">
+              <div className="card-header">
+                <h2 className="restaurant-name">{t('bites.restaurants.starbucks_wende.name')}</h2>
+                <div className="accessibility-tags">
+                  <span className="tag">
+                    <span className="icon">👂</span>
+                    {t('bites.tags.hearing')}
+                  </span>
+                  <span className="tag">
+                    <span className="icon">☕</span>
+                    咖啡
+                  </span>
+                </div>
+              </div>
+              <div className="card-body">
+                <p className="description">{t('bites.restaurants.starbucks_wende.description')}</p>
+                <div className="features">
+                  <h3 className="features-title">{t('bites.labels.features')}</h3>
+                  <ul className="features-list">
+                    {renderFeatures('bites.restaurants.starbucks_wende.features')}
+                  </ul>
+                </div>
+                <div className="info-section">
+                  <div className="info-item">
+                    <span className="info-label">{t('bites.labels.food')}</span>
+                    <span>{t('bites.restaurants.starbucks_wende.food')}</span>
+                  </div>
+                  <div className="info-item">
+                    <span className="info-label">{t('bites.labels.value')}</span>
+                    <span>{t('bites.restaurants.starbucks_wende.value')}</span>
+                  </div>
+                  <div className="info-item">
+                    <span className="info-label">{t('bites.labels.address')}</span>
+                    <span>{t('bites.restaurants.starbucks_wende.address')}</span>
+                    <button
+                      aria-label={t('bites.labels.navigate')}
+                      className="ml-2 px-2 py-[2px] rounded-md text-white bg-gradient-to-r from-pink-600 via-pink-500 to-purple-600 hover:brightness-110 text-xs align-middle"
+                      onClick={() => openAmapNavigation(t('bites.restaurants.starbucks_wende.address'), t('bites.restaurants.starbucks_wende.name'))}
+                    >
+                      {t('bites.labels.navigate')}
+                    </button>
+                    {copiedPeiGe && (
+                      <span className="ml-2 text-green-600 text-sm align-middle">{t('bites.labels.copied')}</span>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* 全聚德前门店（北京） */}
+            <div className={`restaurant-card ${isVisible('visual') ? '' : 'hidden'}`} data-accessibility="visual">
+              <div className="card-header">
+                <h2 className="restaurant-name">{t('bites.restaurants.quanjude_qianmen.name')}</h2>
+                <div className="accessibility-tags">
+                  <span className="tag">
+                    <span className="icon">👁️</span>
+                    {t('bites.tags.visual')}
+                  </span>
+                </div>
+              </div>
+              <div className="card-body">
+                <p className="description">{t('bites.restaurants.quanjude_qianmen.description')}</p>
+                <div className="features">
+                  <h3 className="features-title">{t('bites.labels.features')}</h3>
+                  <ul className="features-list">
+                    {renderFeatures('bites.restaurants.quanjude_qianmen.features')}
+                  </ul>
+                </div>
+                <div className="info-section">
+                  <div className="info-item">
+                    <span className="info-label">{t('bites.labels.food')}</span>
+                    <span>{t('bites.restaurants.quanjude_qianmen.food')}</span>
+                  </div>
+                  <div className="info-item">
+                    <span className="info-label">{t('bites.labels.value')}</span>
+                    <span>{t('bites.restaurants.quanjude_qianmen.value')}</span>
+                  </div>
+                  <div className="info-item">
+                    <span className="info-label">{t('bites.labels.address')}</span>
+                    <span>{t('bites.restaurants.quanjude_qianmen.address')}</span>
+                    <button
+                      aria-label={t('bites.labels.navigate')}
+                      className="ml-2 px-2 py-[2px] rounded-md text-white bg-gradient-to-r from-pink-600 via-pink-500 to-purple-600 hover:brightness-110 text-xs align-middle"
+                      onClick={() => openAmapNavigation(t('bites.restaurants.quanjude_qianmen.address'), t('bites.restaurants.quanjude_qianmen.name'))}
+                    >
+                      {t('bites.labels.navigate')}
+                    </button>
+                    {copiedPeiGe && (
+                      <span className="ml-2 text-green-600 text-sm align-middle">{t('bites.labels.copied')}</span>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* 并排展示 那伽树 与 无声饭店 */}
+          <div className="card-row">
+            {/* 那伽树无障碍咖啡披萨集合店（北京大栅栏） */}
+            <div className={`restaurant-card ${isVisible(['visual','wheelchair']) ? '' : 'hidden'}`} data-accessibility="visual wheelchair">
+              <div className="card-header">
+                <h2 className="restaurant-name">{t('bites.restaurants.naga_tree.name')}</h2>
+                <div className="accessibility-tags">
+                  <span className="tag">
+                    <span className="icon">👁️</span>
+                    {t('bites.tags.visual')}
+                  </span>
+                  <span className="tag">
+                    <span className="icon">♿</span>
+                    {t('bites.tags.wheelchair')}
+                  </span>
+                </div>
+              </div>
+              <div className="card-body">
+                <p className="description">{t('bites.restaurants.naga_tree.description')}</p>
+                <div className="features">
+                  <h3 className="features-title">{t('bites.labels.features')}</h3>
+                  <ul className="features-list">
+                    {renderFeatures('bites.restaurants.naga_tree.features')}
+                  </ul>
+                </div>
+                <div className="info-section">
+                  <div className="info-item">
+                    <span className="info-label">{t('bites.labels.highlights')}</span>
+                    <span>{t('bites.restaurants.naga_tree.highlights')}</span>
+                  </div>
+                  <div className="info-item">
+                    <span className="info-label">{t('bites.labels.address')}</span>
+                    <span>{t('bites.restaurants.naga_tree.address')}</span>
+                    <button
+                      aria-label={t('bites.labels.navigate')}
+                      className="ml-2 px-2 py-[2px] rounded-md text-white bg-gradient-to-r from-pink-600 via-pink-500 to-purple-600 hover:brightness-110 text-xs align-middle"
+                      onClick={() => openAmapNavigation(t('bites.restaurants.naga_tree.address'), t('bites.restaurants.naga_tree.name'))}
+                    >
+                      {t('bites.labels.navigate')}
+                    </button>
+                    {copiedPeiGe && (
+                      <span className="ml-2 text-green-600 text-sm align-middle">{t('bites.labels.copied')}</span>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* 无声饭店（云南玉溪） */}
+            <div className={`restaurant-card ${isVisible(['hearing','cognitive']) ? '' : 'hidden'}`} data-accessibility="hearing cognitive">
+              <div className="card-header">
+                  <h2 className="restaurant-name">{t('bites.restaurants.silent_yuxi.name')}</h2>
+                  <div className="accessibility-tags">
+                    <span className="tag">
+                      <span className="icon">👂</span>
+                      {t('bites.tags.hearing')}
+                    </span>
+                    <span className="tag">
+                      <span className="icon">🧠</span>
+                      {t('bites.tags.cognitive')}
+                    </span>
+                  </div>
+                </div>
+              <div className="card-body">
+                <p className="description">{t('bites.restaurants.silent_yuxi.description')}</p>
+                <div className="features">
+                  <h3 className="features-title">{t('bites.labels.features')}</h3>
+                  <ul className="features-list">
+                    {renderFeatures('bites.restaurants.silent_yuxi.features')}
+                  </ul>
+                </div>
+                <div className="info-section">
+                  <div className="info-item">
+                    <span className="info-label">{t('bites.labels.food')}</span>
+                    <span>{t('bites.restaurants.silent_yuxi.food')}</span>
+                  </div>
+                  <div className="info-item">
+                    <span className="info-label">{t('bites.labels.value')}</span>
+                    <span>{t('bites.restaurants.silent_yuxi.value')}</span>
+                  </div>
+                  <div className="info-item">
+                    <span className="info-label">{t('bites.labels.address')}</span>
+                    <span>{t('bites.restaurants.silent_yuxi.address')}</span>
+                    <button
+                      aria-label={t('bites.labels.navigate')}
+                      className="ml-2 px-2 py-[2px] rounded-md text-white bg-gradient-to-r from-pink-600 via-pink-500 to-purple-600 hover:brightness-110 text-xs align-middle"
+                      onClick={() => openAmapNavigation(t('bites.restaurants.silent_yuxi.address'), t('bites.restaurants.silent_yuxi.name'))}
+                    >
+                      {t('bites.labels.navigate')}
+                    </button>
+                    {copiedPeiGe && (
+                      <span className="ml-2 text-green-600 text-sm align-middle">{t('bites.labels.copied')}</span>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+            {/* 原谅小串（北京798艺术园区） */}
+            <div className={`restaurant-card ${isVisible('hearing') ? '' : 'hidden'}`} data-accessibility="hearing">
+              <div className="card-header">
+                  <h2 className="restaurant-name">{t('bites.restaurants.yuanliang_798.name')}</h2>
+                  <div className="accessibility-tags">
+                    <span className="tag">
+                      <span className="icon">👂</span>
+                      {t('bites.tags.hearing')}
+                    </span>
+                  </div>
+                </div>
+              <div className="card-body">
+                <p className="description">{t('bites.restaurants.yuanliang_798.description')}</p>
+                <div className="features">
+                  <h3 className="features-title">{t('bites.labels.features')}</h3>
+                  <ul className="features-list">
+                    {renderFeatures('bites.restaurants.yuanliang_798.features')}
+                  </ul>
+                </div>
+                <div className="info-section">
+                  <div className="info-item">
+                    <span className="info-label">{t('bites.labels.food')}</span>
+                    <span>{t('bites.restaurants.yuanliang_798.food')}</span>
+                  </div>
+                  <div className="info-item">
+                    <span className="info-label">{t('bites.labels.value')}</span>
+                    <span>{t('bites.restaurants.yuanliang_798.value')}</span>
+                  </div>
+                  <div className="info-item">
+                    <span className="info-label">{t('bites.labels.address')}</span>
+                    <span>{t('bites.restaurants.yuanliang_798.address')}</span>
+                    <button
+                      aria-label={t('bites.labels.navigate')}
+                      className="ml-2 px-2 py-[2px] rounded-md text-white bg-gradient-to-r from-pink-600 via-pink-500 to-purple-600 hover:brightness-110 text-xs align-middle"
+                      onClick={() => openAmapNavigation(t('bites.restaurants.yuanliang_798.address'), t('bites.restaurants.yuanliang_798.name'))}
+                    >
+                      {t('bites.labels.navigate')}
+                    </button>
+                    {copiedPeiGe && (
+                      <span className="ml-2 text-green-600 text-sm align-middle">{t('bites.labels.copied')}</span>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+            {/* 彩虹天使咖啡屋（北京昌平辛庄村） */}
+            <div className={`restaurant-card ${isVisible('hearing') ? '' : 'hidden'}`} data-accessibility="hearing">
+              <div className="card-header">
+                  <h2 className="restaurant-name">{t('bites.restaurants.rainbow_angel.name')}</h2>
+                  <div className="accessibility-tags">
+                    <span className="tag">
+                      <span className="icon">👂</span>
+                      {t('bites.tags.hearing')}
+                    </span>
+                  </div>
+                </div>
+              <div className="card-body">
+                <p className="description">{t('bites.restaurants.rainbow_angel.description')}</p>
+                <div className="features">
+                  <h3 className="features-title">{t('bites.labels.features')}</h3>
+                  <ul className="features-list">
+                    {renderFeatures('bites.restaurants.rainbow_angel.features')}
+                  </ul>
+                </div>
+                <div className="info-section">
+                  <div className="info-item">
+                    <span className="info-label">{t('bites.labels.food')}</span>
+                    <span>{t('bites.restaurants.rainbow_angel.food')}</span>
+                  </div>
+                  <div className="info-item">
+                    <span className="info-label">{t('bites.labels.value')}</span>
+                    <span>{t('bites.restaurants.rainbow_angel.value')}</span>
+                  </div>
+                  <div className="info-item">
+                    <span className="info-label">{t('bites.labels.address')}</span>
+                    <span>{t('bites.restaurants.rainbow_angel.address')}</span>
+                    <button
+                      aria-label={t('bites.labels.navigate')}
+                      className="ml-2 px-2 py-[2px] rounded-md text-white bg-gradient-to-r from-pink-600 via-pink-500 to-purple-600 hover:brightness-110 text-xs align-middle"
+                      onClick={() => openAmapNavigation(t('bites.restaurants.rainbow_angel.address'), t('bites.restaurants.rainbow_angel.name'))}
+                    >
+                      {t('bites.labels.navigate')}
+                    </button>
+                    {copiedPeiGe && (
+                      <span className="ml-2 text-green-600 text-sm align-middle">{t('bites.labels.copied')}</span>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+            {/* 米娜餐厅（北京通州） */}
+            <div className={`restaurant-card ${isVisible('hearing') ? '' : 'hidden'}`} data-accessibility="hearing">
+              <div className="card-header">
+                  <h2 className="restaurant-name">{t('bites.restaurants.mina_tongzhou.name')}</h2>
+                  <div className="accessibility-tags">
+                    <span className="tag">
+                      <span className="icon">👂</span>
+                      {t('bites.tags.hearing')}
+                    </span>
+                  </div>
+                </div>
+              <div className="card-body">
+                <p className="description">{t('bites.restaurants.mina_tongzhou.description')}</p>
+                <div className="features">
+                  <h3 className="features-title">{t('bites.labels.features')}</h3>
+                  <ul className="features-list">
+                    {renderFeatures('bites.restaurants.mina_tongzhou.features')}
+                  </ul>
+                </div>
+                <div className="info-section">
+                  <div className="info-item">
+                    <span className="info-label">{t('bites.labels.food')}</span>
+                    <span>{t('bites.restaurants.mina_tongzhou.food')}</span>
+                  </div>
+                  <div className="info-item">
+                    <span className="info-label">{t('bites.labels.value')}</span>
+                    <span>{t('bites.restaurants.mina_tongzhou.value')}</span>
+                  </div>
+                  <div className="info-item">
+                    <span className="info-label">{t('bites.labels.address')}</span>
+                    <span>{t('bites.restaurants.mina_tongzhou.address')}</span>
+                    <button
+                      aria-label={t('bites.labels.navigate')}
+                      className="ml-2 px-2 py-[2px] rounded-md text-white bg-gradient-to-r from-pink-600 via-pink-500 to-purple-600 hover:brightness-110 text-xs align-middle"
+                      onClick={() => openAmapNavigation(t('bites.restaurants.mina_tongzhou.address'), t('bites.restaurants.mina_tongzhou.name'))}
+                    >
+                      {t('bites.labels.navigate')}
+                    </button>
+                    {copiedPeiGe && (
+                      <span className="ml-2 text-green-600 text-sm align-middle">{t('bites.labels.copied')}</span>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+            {/* 无声火锅店（重庆两江新区） */}
+            <div className={`restaurant-card ${isVisible('hearing') ? '' : 'hidden'}`} data-accessibility="hearing">
+              <div className="card-header">
+                  <h2 className="restaurant-name">{t('bites.restaurants.silent_hotpot.name')}</h2>
+                  <div className="accessibility-tags">
+                    <span className="tag">
+                      <span className="icon">👂</span>
+                      {t('bites.tags.hearing')}
+                    </span>
+                  </div>
+                </div>
+              <div className="card-body">
+                <p className="description">{t('bites.restaurants.silent_hotpot.description')}</p>
+                <div className="features">
+                  <h3 className="features-title">{t('bites.labels.features')}</h3>
+                  <ul className="features-list">
+                    {renderFeatures('bites.restaurants.silent_hotpot.features')}
+                  </ul>
+                </div>
+                <div className="info-section">
+                  <div className="info-item">
+                    <span className="info-label">{t('bites.labels.food')}</span>
+                    <span>{t('bites.restaurants.silent_hotpot.food')}</span>
+                  </div>
+                  <div className="info-item">
+                    <span className="info-label">{t('bites.labels.value')}</span>
+                    <span>{t('bites.restaurants.silent_hotpot.value')}</span>
+                  </div>
+                  <div className="info-item">
+                    <span className="info-label">{t('bites.labels.address')}</span>
+                    <span>{t('bites.restaurants.silent_hotpot.address')}</span>
+                    <button
+                      aria-label={t('bites.labels.navigate')}
+                      className="ml-2 px-2 py-[2px] rounded-md text-white bg-gradient-to-r from-pink-600 via-pink-500 to-purple-600 hover:brightness-110 text-xs align-middle"
+                      onClick={() => openAmapNavigation(t('bites.restaurants.silent_hotpot.address'), t('bites.restaurants.silent_hotpot.name'))}
+                    >
+                      {t('bites.labels.navigate')}
+                    </button>
+                    {copiedPeiGe && (
+                      <span className="ml-2 text-green-600 text-sm align-middle">{t('bites.labels.copied')}</span>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+            {/* 春锄咖啡店（北京盲人学校附近） */}
+            <div className={`restaurant-card ${isVisible('cognitive') ? '' : 'hidden'}`} data-accessibility="cognitive">
+              <div className="card-header">
+                  <h2 className="restaurant-name">{t('bites.restaurants.chunchu.name')}</h2>
+                  <div className="accessibility-tags">
+                    <span className="tag">
+                      <span className="icon">🧠</span>
+                      {t('bites.tags.cognitive')}
+                    </span>
+                  </div>
+                </div>
+              <div className="card-body">
+                <p className="description">{t('bites.restaurants.chunchu.description')}</p>
+                <div className="features">
+                  <h3 className="features-title">{t('bites.labels.features')}</h3>
+                  <ul className="features-list">
+                    {renderFeatures('bites.restaurants.chunchu.features')}
+                  </ul>
+                </div>
+                <div className="info-section">
+                  <div className="info-item">
+                    <span className="info-label">{t('bites.labels.food')}</span>
+                    <span>{t('bites.restaurants.chunchu.food')}</span>
+                  </div>
+                  <div className="info-item">
+                    <span className="info-label">{t('bites.labels.value')}</span>
+                    <span>{t('bites.restaurants.chunchu.value')}</span>
+                  </div>
+                  <div className="info-item">
+                    <span className="info-label">{t('bites.labels.address')}</span>
+                    <span>{t('bites.restaurants.chunchu.address')}</span>
+                    <button
+                      aria-label={t('bites.labels.navigate')}
+                      className="ml-2 px-2 py-[2px] rounded-md text-white bg-gradient-to-r from-pink-600 via-pink-500 to-purple-600 hover:brightness-110 text-xs align-middle"
+                      onClick={() => openAmapNavigation(t('bites.restaurants.chunchu.address'), t('bites.restaurants.chunchu.name'))}
+                    >
+                      {t('bites.labels.navigate')}
+                    </button>
+                    {copiedPeiGe && (
+                      <span className="ml-2 text-green-600 text-sm align-middle">{t('bites.labels.copied')}</span>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+            {/* 星巴克无障碍店（美国华盛顿特区 联合市场） */}
+            <div className={`restaurant-card ${isVisible('wheelchair') ? '' : 'hidden'}`} data-accessibility="wheelchair">
+              <div className="card-header">
+                  <h2 className="restaurant-name">{t('bites.restaurants.starbucks_dc.name')}</h2>
+                  <div className="accessibility-tags">
+                    <span className="tag">
+                      <span className="icon">♿</span>
+                      {t('bites.tags.wheelchair')}
+                    </span>
+                  </div>
+                </div>
+              <div className="card-body">
+                <p className="description">{t('bites.restaurants.starbucks_dc.description')}</p>
+                <div className="features">
+                  <h3 className="features-title">{t('bites.labels.features')}</h3>
+                  <ul className="features-list">
+                    {renderFeatures('bites.restaurants.starbucks_dc.features')}
+                  </ul>
+                </div>
+                <div className="info-section">
+                  <div className="info-item">
+                    <span className="info-label">{t('bites.labels.food')}</span>
+                    <span>{t('bites.restaurants.starbucks_dc.food')}</span>
+                  </div>
+                  <div className="info-item">
+                    <span className="info-label">{t('bites.labels.value')}</span>
+                    <span>{t('bites.restaurants.starbucks_dc.value')}</span>
+                  </div>
+                  <div className="info-item">
+                    <span className="info-label">{t('bites.labels.address')}</span>
+                    <span>{t('bites.restaurants.starbucks_dc.address')}</span>
+                    <button
+                      aria-label={t('bites.labels.navigate')}
+                      className="ml-2 px-2 py-[2px] rounded-md text-white bg-gradient-to-r from-pink-600 via-pink-500 to-purple-600 hover:brightness-110 text-xs align-middle"
+                      onClick={() => openAmapNavigation(t('bites.restaurants.starbucks_dc.address'), t('bites.restaurants.starbucks_dc.name'))}
+                    >
+                      {t('bites.labels.navigate')}
+                    </button>
+                    {copiedPeiGe && (
+                      <span className="ml-2 text-green-600 text-sm align-middle">{t('bites.labels.copied')}</span>
+                    )}
                   </div>
                 </div>
               </div>
@@ -253,16 +764,18 @@ export default function BarrierFreeBitesPage() {
           </div>
 
           <div className="about-section">
-            <h2 className="about-title">关于无障碍美食</h2>
+            <h2 className="about-title">{t('bites.about.title')}</h2>
             <p className="about-content">
-              无障碍美食不仅仅是提供物理上的便利设施，更是一种尊重和包容的态度。这些餐厅通过专业的服务、贴心的设计和平等的理念，让每一位顾客都能享受到美好的用餐体验。它们不仅为残障人士提供了就业机会，也让更多人了解和关注无障碍服务的重要性。
+              {t('bites.about.p1')}
             </p>
             <p className="about-content" style={{ marginTop: 'var(--space-16)' }}>
-              我们希望通过这份指南，帮助大家发现更多这样有温度的餐厅，同时也呼吁更多餐饮企业关注无障碍服务，共同营造一个更加包容友好的社会环境。
+              {t('bites.about.p2')}
             </p>
           </div>
         </div>
       </div>
+      {/* AI 美食推荐对话框触发器 */}
+      <FoodAIDialog />
     </div>
   )
 }

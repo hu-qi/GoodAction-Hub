@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Link from "next/link";
+import { SwitchLanguage } from '@/components/SwitchLanguage';
 
 const inter = Inter({
   variable: "--font-inter",
@@ -45,6 +46,9 @@ export default function RootLayout({
                    无障碍友好美食指南
                  </Link>
               </nav>
+              <div className="flex items-center gap-3">
+                <SwitchLanguage />
+              </div>
             </div>
           </header>
           {children}

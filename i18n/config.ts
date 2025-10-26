@@ -21,7 +21,8 @@ i18next
     },
     fallbackLng: 'zh-CN',
     interpolation: { escapeValue: false },
-    defaultNS: 'common',
+    defaultNS: 'translation',
+    ns: ['translation'],
     supportedLngs: supportedLngs,
     nonExplicitSupportedLngs: false,
     detection: {
