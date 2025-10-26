@@ -19,10 +19,6 @@ function SafeTranslation({ tKey, fallback }: { tKey: string; fallback: string })
 export default function BarrierFreeBitesPage() {
   const [filter, setFilter] = useState<"all" | "hearing" | "visual" | "wheelchair" | "cognitive">("all")
   const [copiedPeiGe, setCopiedPeiGe] = useState(false)
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
   
   const handleCopyAddress = async (text: string) => {
     try {
