@@ -50,34 +50,47 @@ export default function BarrierFreeBitesPage() {
     starbucks_wende: { lat: 39.915, lng: 116.404, address: "北京市朝阳区文德路" }
   }
 
-  const [navigationLoading, setNavigationLoading] = useState<keyof typeof restaurantCoords | null>(null)
+  const [navigationLoading, setNavigationLoading] = useState<string | null>(null)
+  const openAmapNavigation = (place: keyof typeof restaurantCoords | string, name?: string) => {
+    const isKnownKey = typeof place === 'string' && (place in restaurantCoords)
+    const restaurant = isKnownKey
+      ? restaurantCoords[place as keyof typeof restaurantCoords]
+      : typeof place !== 'string'
+        ? restaurantCoords[place]
+        : undefined
 
-  const openAmapNavigation = (restaurantKey: keyof typeof restaurantCoords, name?: string) => {
-    const restaurant = restaurantCoords[restaurantKey]
-    if (!restaurant) return
+    // 记录加载状态使用字符串，便于任意地址对比
+    setNavigationLoading(String(place))
 
-    setNavigationLoading(restaurantKey)
-    
+    if (!restaurant) {
+      // 未预设坐标：使用网页版标记链接进行导航/定位
+      const address = typeof place === 'string' ? place : (name || '')
+      const markerUrl = `https://uri.amap.com/marker?address=${encodeURIComponent(address)}&name=${encodeURIComponent(name || address)}`
+      window.open(markerUrl, '_blank', 'noopener,noreferrer')
+      setNavigationLoading(null)
+      return
+    }
+
     // 构建高德地图 APP 协议链接
     const appUrl = `amapuri://route/plan/?dlat=${restaurant.lat}&dlon=${restaurant.lng}&dname=${encodeURIComponent(name || restaurant.address)}&dev=0&t=0`
-    
+
     // 构建网页版链接作为回退
     const webUrl = `https://uri.amap.com/navigation?to=${restaurant.lng},${restaurant.lat},${encodeURIComponent(name || restaurant.address)}&mode=car&policy=1&src=mypage`
-    
+
     // 尝试打开 APP，如果失败则打开网页版
     const tryOpenApp = () => {
       const iframe = document.createElement('iframe')
       iframe.style.display = 'none'
       iframe.src = appUrl
       document.body.appendChild(iframe)
-      
+
       // 设置超时，如果 APP 没有响应则打开网页版
       const timeout = setTimeout(() => {
         document.body.removeChild(iframe)
         window.open(webUrl, '_blank', 'noopener,noreferrer')
         setNavigationLoading(null)
       }, 2000)
-      
+
       // 监听页面可见性变化，如果用户切换到其他应用说明 APP 打开成功
       const handleVisibilityChange = () => {
         if (document.hidden) {
@@ -87,9 +100,9 @@ export default function BarrierFreeBitesPage() {
           setNavigationLoading(null)
         }
       }
-      
+
       document.addEventListener('visibilitychange', handleVisibilityChange)
-      
+
       // 清理函数
       setTimeout(() => {
         try {
@@ -105,7 +118,7 @@ export default function BarrierFreeBitesPage() {
 
     // 检测是否为移动设备
     const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
-    
+
     if (isMobile) {
       tryOpenApp()
     } else {
