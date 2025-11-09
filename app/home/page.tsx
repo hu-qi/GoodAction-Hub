@@ -52,7 +52,7 @@ export default function HomeSelector() {
                       无障碍友好美食指南
                     </div>
                     <div className="mt-1 text-gray-600 text-sm">
-                      探索更友好的餐饮空间与无障碍出行导航。
+                      探索更友好的餐饮空间与无障碍觅食导航。
                     </div>
                   </div>
                 </div>
