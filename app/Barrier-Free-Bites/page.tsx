@@ -45,10 +45,12 @@ export default function BarrierFreeBitesPage() {
   const restaurantCoords = {
     peige: { lat: 39.9365, lng: 116.4477, address: "北京市朝阳区三里屯太古里南区" },
     muma: { lat: 39.9365, lng: 116.4477, address: "北京市朝阳区工体北路" },
-    starbucks: { lat: 23.1291, lng: 113.2644, address: "广州市天河区" }
+    starbucks: { lat: 23.1291, lng: 113.2644, address: "广州市天河区" },
+    // 新增：星巴克东方文德手语门店（北京文德路），用于页面中的 'starbucks_wende' key
+    starbucks_wende: { lat: 39.915, lng: 116.404, address: "北京市朝阳区文德路" }
   }
 
-  const [navigationLoading, setNavigationLoading] = useState<string | null>(null)
+  const [navigationLoading, setNavigationLoading] = useState<keyof typeof restaurantCoords | null>(null)
 
   const openAmapNavigation = (restaurantKey: keyof typeof restaurantCoords, name?: string) => {
     const restaurant = restaurantCoords[restaurantKey]
