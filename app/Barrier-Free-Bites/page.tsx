@@ -25,7 +25,9 @@ export default function BarrierFreeBitesPage() {
     muma: { lat: 39.9365, lng: 116.4477, address: "北京市朝阳区工体北路" },
     starbucks: { lat: 23.1291, lng: 113.2644, address: "广州市天河区" },
     // 新增：星巴克东方文德手语门店（北京文德路），用于页面中的 'starbucks_wende' key
-    starbucks_wende: { lat: 39.915, lng: 116.404, address: "北京市朝阳区文德路" }
+    starbucks_wende: { lat: 39.915, lng: 116.404, address: "北京市朝阳区文德路" },
+    // 星巴克DC店（国贸）
+    starbucks_dc: { lat: 39.914, lng: 116.457, address: "北京市朝阳区国贸" }
   }
 
   const [navigationLoading, setNavigationLoading] = useState<string | null>(null)
@@ -37,8 +39,8 @@ export default function BarrierFreeBitesPage() {
         ? restaurantCoords[place]
         : undefined
 
-    // 记录加载状态使用字符串，便于任意地址对比
-    setNavigationLoading(String(place))
+    // 记录加载状态，优先使用名称，避免地址字符串不稳定
+    setNavigationLoading(name ? name : String(place))
 
     if (!restaurant) {
       // 未预设坐标：使用网页版标记链接进行导航/定位
@@ -312,13 +314,16 @@ export default function BarrierFreeBitesPage() {
                   <div className="info-item">
                     <span className="info-label"><SafeTranslation tKey="bites.labels.address" fallback="地址" /></span>
                     <span><SafeTranslation tKey="bites.restaurants.peige.address" fallback="北京市朝阳区三里屯太古里南区" /></span>
-                    <button
+                    <span
+                      role="button"
+                      tabIndex={0}
                       aria-label="导航"
                       className="ml-2 px-3 py-1 rounded-md text-white bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-xs align-middle transition-all duration-200 flex items-center gap-1 shadow-sm hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
                       onClick={() => openAmapNavigation('peige', '培哥烟囱面包')}
-                      disabled={navigationLoading === 'peige'}
+                      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') openAmapNavigation('peige', '培哥烟囱面包') }}
+                      aria-disabled={navigationLoading === '培哥烟囱面包'}
                     >
-                      {navigationLoading === 'peige' ? (
+                      {navigationLoading === '培哥烟囱面包' ? (
                         <>
                           <svg className="animate-spin h-3 w-3" viewBox="0 0 24 24">
                             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle>
@@ -335,7 +340,7 @@ export default function BarrierFreeBitesPage() {
                           <SafeTranslation tKey="bites.labels.navigate" fallback="导航" />
                         </>
                       )}
-                    </button>
+                    </span>
                   </div>
                 </div>
               </div>
@@ -376,13 +381,16 @@ export default function BarrierFreeBitesPage() {
                   <div className="info-item">
                     <span className="info-label"><SafeTranslation tKey="bites.labels.address" fallback="地址" /></span>
                     <span><SafeTranslation tKey="bites.restaurants.muma_dark.address" fallback="北京市朝阳区工体北路" /></span>
-                    <button
+                    <span
+                      role="button"
+                      tabIndex={0}
                       aria-label="导航"
                       className="ml-2 px-3 py-1 rounded-md text-white bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-xs align-middle transition-all duration-200 flex items-center gap-1 shadow-sm hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
                       onClick={() => openAmapNavigation('muma', '木马黑暗餐厅')}
-                      disabled={navigationLoading === 'muma'}
+                      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') openAmapNavigation('muma', '木马黑暗餐厅') }}
+                      aria-disabled={navigationLoading === '木马黑暗餐厅'}
                     >
-                      {navigationLoading === 'muma' ? (
+                      {navigationLoading === '木马黑暗餐厅' ? (
                         <>
                           <svg className="animate-spin h-3 w-3" viewBox="0 0 24 24">
                             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle>
@@ -399,7 +407,7 @@ export default function BarrierFreeBitesPage() {
                           <SafeTranslation tKey="bites.labels.navigate" fallback="导航" />
                         </>
                       )}
-                    </button>
+                    </span>
                   </div>
                 </div>
               </div>
@@ -440,13 +448,16 @@ export default function BarrierFreeBitesPage() {
                   <div className="info-item">
                     <span className="info-label"><SafeTranslation tKey="bites.labels.address" fallback="地址" /></span>
                     <span><SafeTranslation tKey="bites.restaurants.starbucks_wende.address" fallback="北京市朝阳区文德路" /></span>
-                    <button
+                    <span
+                      role="button"
                       aria-label="导航"
+                      tabIndex={0}
                       className="ml-2 px-3 py-1 rounded-md text-white bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-xs align-middle transition-all duration-200 flex items-center gap-1 shadow-sm hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
                       onClick={() => openAmapNavigation('starbucks_wende', '星巴克文德店')}
-                      disabled={navigationLoading === 'starbucks_wende'}
+                      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') openAmapNavigation('starbucks_wende', '星巴克文德店') }}
+                      aria-disabled={navigationLoading === '星巴克文德店'}
                     >
-                      {navigationLoading === 'starbucks_wende' ? (
+                      {navigationLoading === '星巴克文德店' ? (
                         <>
                           <svg className="animate-spin h-3 w-3" viewBox="0 0 24 24">
                             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle>
@@ -463,7 +474,7 @@ export default function BarrierFreeBitesPage() {
                           <SafeTranslation tKey="bites.labels.navigate" fallback="导航" />
                         </>
                       )}
-                    </button>
+                    </span>
                   </div>
                 </div>
               </div>
@@ -500,13 +511,16 @@ export default function BarrierFreeBitesPage() {
                   <div className="info-item">
                     <span className="info-label"><SafeTranslation tKey="bites.labels.address" fallback="地址" /></span>
                     <span><SafeTranslation tKey="bites.restaurants.quanjude_qianmen.address" fallback="北京市东城区前门大街" /></span>
-                    <button
+                    <span
+                      role="button"
                       aria-label="导航"
+                      tabIndex={0}
                       className="ml-2 px-2 py-[2px] rounded-md text-white bg-gradient-to-r from-pink-600 via-pink-500 to-purple-600 hover:brightness-110 text-xs align-middle"
                       onClick={() => openAmapNavigation('北京市东城区前门大街', '全聚德前门店')}
+                      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') openAmapNavigation('北京市东城区前门大街', '全聚德前门店') }}
                     >
                       <SafeTranslation tKey="bites.labels.navigate" fallback="导航" />
-                    </button>
+                    </span>
                   </div>
                 </div>
               </div>
@@ -546,13 +560,16 @@ export default function BarrierFreeBitesPage() {
                   <div className="info-item">
                     <span className="info-label"><SafeTranslation tKey="bites.labels.address" fallback="地址" /></span>
                     <span><SafeTranslation tKey="bites.restaurants.naga_tree.address" fallback="北京市西城区大栅栏" /></span>
-                    <button
+                    <span
+                      role="button"
                       aria-label="导航"
+                      tabIndex={0}
                       className="ml-2 px-2 py-[2px] rounded-md text-white bg-gradient-to-r from-pink-600 via-pink-500 to-purple-600 hover:brightness-110 text-xs align-middle"
                       onClick={() => openAmapNavigation('北京市西城区大栅栏', '那伽树无障碍咖啡披萨集合店')}
+                      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') openAmapNavigation('北京市西城区大栅栏', '那伽树无障碍咖啡披萨集合店') }}
                     >
                       <SafeTranslation tKey="bites.labels.navigate" fallback="导航" />
-                    </button>
+                    </span>
                   </div>
                 </div>
               </div>
@@ -593,13 +610,16 @@ export default function BarrierFreeBitesPage() {
                   <div className="info-item">
                     <span className="info-label"><SafeTranslation tKey="bites.labels.address" fallback="地址" /></span>
                     <span><SafeTranslation tKey="bites.restaurants.silent_yuxi.address" fallback="云南省玉溪市红塔区" /></span>
-                    <button
+                    <span
+                      role="button"
                       aria-label="导航"
+                      tabIndex={0}
                       className="ml-2 px-2 py-[2px] rounded-md text-white bg-gradient-to-r from-pink-600 via-pink-500 to-purple-600 hover:brightness-110 text-xs align-middle"
                       onClick={() => openAmapNavigation('云南省玉溪市红塔区', '无声饭店')}
+                      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') openAmapNavigation('云南省玉溪市红塔区', '无声饭店') }}
                     >
                       <SafeTranslation tKey="bites.labels.navigate" fallback="导航" />
-                    </button>
+                    </span>
                   </div>
                 </div>
               </div>
@@ -639,13 +659,16 @@ export default function BarrierFreeBitesPage() {
                   <div className="info-item">
                     <span className="info-label"><SafeTranslation tKey="bites.labels.address" fallback="地址" /></span>
                     <span><SafeTranslation tKey="bites.restaurants.yuanliang_798.address" fallback="北京市朝阳区798艺术区" /></span>
-                    <button
+                    <span
+                      role="button"
                       aria-label="导航"
+                      tabIndex={0}
                       className="ml-2 px-2 py-[2px] rounded-md text-white bg-gradient-to-r from-pink-600 via-pink-500 to-purple-600 hover:brightness-110 text-xs align-middle"
                       onClick={() => openAmapNavigation('北京市朝阳区798艺术区', '圆亮798')}
+                      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') openAmapNavigation('北京市朝阳区798艺术区', '圆亮798') }}
                     >
                       <SafeTranslation tKey="bites.labels.navigate" fallback="导航" />
-                    </button>
+                    </span>
                   </div>
                 </div>
               </div>
@@ -681,13 +704,16 @@ export default function BarrierFreeBitesPage() {
                   <div className="info-item">
                     <span className="info-label"><SafeTranslation tKey="bites.labels.address" fallback="地址" /></span>
                     <span><SafeTranslation tKey="bites.restaurants.rainbow_angel.address" fallback="北京市海淀区中关村" /></span>
-                    <button
+                    <span
+                      role="button"
                       aria-label="导航"
+                      tabIndex={0}
                       className="ml-2 px-2 py-[2px] rounded-md text-white bg-gradient-to-r from-pink-600 via-pink-500 to-purple-600 hover:brightness-110 text-xs align-middle"
                       onClick={() => openAmapNavigation('北京市海淀区中关村', '彩虹天使')}
+                      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') openAmapNavigation('北京市海淀区中关村', '彩虹天使') }}
                     >
                       <SafeTranslation tKey="bites.labels.navigate" fallback="导航" />
-                    </button>
+                    </span>
                   </div>
                 </div>
               </div>
@@ -723,13 +749,16 @@ export default function BarrierFreeBitesPage() {
                   <div className="info-item">
                     <span className="info-label"><SafeTranslation tKey="bites.labels.address" fallback="地址" /></span>
                     <span><SafeTranslation tKey="bites.restaurants.mina_tongzhou.address" fallback="北京市通州区万达广场" /></span>
-                    <button
+                    <span
+                      role="button"
                       aria-label="导航"
+                      tabIndex={0}
                       className="ml-2 px-2 py-[2px] rounded-md text-white bg-gradient-to-r from-pink-600 via-pink-500 to-purple-600 hover:brightness-110 text-xs align-middle"
                       onClick={() => openAmapNavigation('北京市通州区万达广场', '米娜通州店')}
+                      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') openAmapNavigation('北京市通州区万达广场', '米娜通州店') }}
                     >
                       <SafeTranslation tKey="bites.labels.navigate" fallback="导航" />
-                    </button>
+                    </span>
                   </div>
                 </div>
               </div>
@@ -765,13 +794,16 @@ export default function BarrierFreeBitesPage() {
                   <div className="info-item">
                     <span className="info-label"><SafeTranslation tKey="bites.labels.address" fallback="地址" /></span>
                     <span><SafeTranslation tKey="bites.restaurants.silent_hotpot.address" fallback="北京市丰台区方庄" /></span>
-                    <button
+                    <span
+                      role="button"
                       aria-label="导航"
+                      tabIndex={0}
                       className="ml-2 px-2 py-[2px] rounded-md text-white bg-gradient-to-r from-pink-600 via-pink-500 to-purple-600 hover:brightness-110 text-xs align-middle"
                       onClick={() => openAmapNavigation('北京市丰台区方庄', '无声火锅')}
+                      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') openAmapNavigation('北京市丰台区方庄', '无声火锅') }}
                     >
                       <SafeTranslation tKey="bites.labels.navigate" fallback="导航" />
-                    </button>
+                    </span>
                   </div>
                 </div>
               </div>
@@ -811,13 +843,16 @@ export default function BarrierFreeBitesPage() {
                   <div className="info-item">
                     <span className="info-label"><SafeTranslation tKey="bites.labels.address" fallback="地址" /></span>
                     <span><SafeTranslation tKey="bites.restaurants.chunchu.address" fallback="北京市西城区德胜门" /></span>
-                    <button
+                    <span
+                      role="button"
                       aria-label="导航"
+                      tabIndex={0}
                       className="ml-2 px-2 py-[2px] rounded-md text-white bg-gradient-to-r from-pink-600 via-pink-500 to-purple-600 hover:brightness-110 text-xs align-middle"
                       onClick={() => openAmapNavigation('北京市西城区德胜门', '春厨')}
+                      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') openAmapNavigation('北京市西城区德胜门', '春厨') }}
                     >
                       <SafeTranslation tKey="bites.labels.navigate" fallback="导航" />
-                    </button>
+                    </span>
                   </div>
                 </div>
               </div>
@@ -853,13 +888,16 @@ export default function BarrierFreeBitesPage() {
                   <div className="info-item">
                     <span className="info-label"><SafeTranslation tKey="bites.labels.address" fallback="地址" /></span>
                     <span><SafeTranslation tKey="bites.restaurants.starbucks_dc.address" fallback="北京市朝阳区国贸" /></span>
-                    <button
+                    <span
+                      role="button"
                       aria-label="导航"
+                      tabIndex={0}
                       className="ml-2 px-3 py-1 rounded-md text-white bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-xs align-middle transition-all duration-200 flex items-center gap-1 shadow-sm hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
                       onClick={() => openAmapNavigation('starbucks_dc', '星巴克DC店')}
-                      disabled={navigationLoading === 'starbucks_dc'}
+                      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') openAmapNavigation('starbucks_dc', '星巴克DC店') }}
+                      aria-disabled={navigationLoading === '星巴克DC店'}
                     >
-                      {navigationLoading === 'starbucks_dc' ? (
+                      {navigationLoading === '星巴克DC店' ? (
                         <>
                           <svg className="animate-spin h-3 w-3" viewBox="0 0 24 24">
                             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle>
@@ -876,7 +914,7 @@ export default function BarrierFreeBitesPage() {
                           <SafeTranslation tKey="bites.labels.navigate" fallback="导航" />
                         </>
                       )}
-                    </button>
+                    </span>
                   </div>
                 </div>
               </div>
