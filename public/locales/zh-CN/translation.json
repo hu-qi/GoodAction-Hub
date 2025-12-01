@@ -34,7 +34,7 @@
     },
     "ai_dialog": {
       "title": "输入地点与偏好，让 AI 美食推荐官推荐餐厅",
-      "description": "基于星火大模型，优先推荐无障碍友好餐厅（手语服务、视障友好等）。",
+      "description": "基于星火大模型，推荐无障碍友好餐厅（手语服务、视障友好等）。",
       "labels": {
         "location": "地点",
         "preferences": "美食偏好"

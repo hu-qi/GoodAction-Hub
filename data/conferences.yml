@@ -21,6 +21,30 @@
       date: 2025年11月15日-11月16日
       place: 中国，北京
 
+- title: COSCon'25 第十届中国开源年会 OpenGood 开源公益论坛
+  description: 当乡村振兴需要更透明的协作方式，当视障者渴望平等触摸数字世界，当罕见病患者期待打破信息孤岛 —— 这些藏在生活里的微小期待，正被开源技术悄悄点亮。开源不再只是代码的共享，更成为传递善意的桥梁，它突破产业边界，走进乡村、残障支持、罕见病帮扶、可持续生活等公益领域，让 "技术向善" 从抽象理念，变成能让普通人感受到温度的落地方案。
+  category: conference
+  tags:
+    - 开源公益
+    - 技术向善
+    - 乡村振兴
+    - 残障支持
+    - 罕见病帮扶
+    - 可持续生活
+    - 开源技术
+  events:
+    - year: 2025
+      id: coscon25-opengood-forum-2025
+      link: https://mp.weixin.qq.com/s/QtqSHKBKy3mnd_PM8ZtJTw
+      timeline:
+        - deadline: '2025-12-07T13:30:00'
+          comment: '论坛开始，开场致辞'
+        - deadline: '2025-12-07T17:00:00'
+          comment: 'OpenGood开源公益优秀案例颁奖仪式，论坛结束'
+      timezone: Asia/Shanghai
+      date: 2025年12月7日
+      place: 中国，北京，海淀区 · 丽亭华苑酒店
+
 - title: 乡村儿童美育公益行动论坛
   description: 汇集百位美育行动者，以"重塑联结·在造乡村"为主题，探讨乡村儿童美育发展中的核心问题，推动美育在促进人与人、人与系统关系联结中的价值实现。
   category: conference

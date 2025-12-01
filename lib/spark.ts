@@ -4,10 +4,10 @@ import WebSocket from "ws"
 const HOST = "spark-api.xf-yun.com"
 const PATH = "/v3.5/chat"
 
-const APP_ID = process.env.PLATFORM_APP_ID || ""
-const API_KEY = process.env.PLATFORM_API_KEY || ""
-const API_SECRET = process.env.PLATFORM_API_SECRET || ""
-const SPARK_API_PASSWORD = process.env.SPARK_API_PASSWORD || ""
+const APP_ID = process.env.IFLYTEK_APP_ID || ""
+const API_KEY = process.env.IFLYTEK_API_KEY || ""
+const API_SECRET = process.env.IFLYTEK_API_SECRET || ""
+const SPARK_API_PASSWORD = process.env.SPARK_API_PASSWORD || "vCUmQFjNoriAMAjSemdz:hKIcfQtfAJusmizQGdtU"
 
 export interface SparkMessage {
   role: "system" | "user" | "assistant"
@@ -41,7 +41,7 @@ async function chatSparkWs({
   domain?: string
 }): Promise<string> {
   if (!APP_ID || !API_KEY || !API_SECRET) {
-    throw new Error("星火API环境变量未配置：PLATFORM_APP_ID、PLATFORM_API_KEY、PLATFORM_API_SECRET")
+    throw new Error("星火API环境变量未配置：IFLYTEK_APP_ID、IFLYTEK_API_KEY、IFLYTEK_API_SECRET")
   }
 
   const url = buildWsUrl()
@@ -124,11 +124,11 @@ export async function chatSparkX1Http({
 }): Promise<string> {
   const apiKeyForHttp = SPARK_API_PASSWORD || (API_KEY && API_SECRET ? `${API_KEY}:${API_SECRET}` : "")
   if (!apiKeyForHttp) {
-    throw new Error("星火X1 HTTP环境变量未配置：SPARK_API_PASSWORD 或 PLATFORM_API_KEY/SECRET")
+    throw new Error("星火X1 HTTP环境变量未配置：SPARK_API_PASSWORD 或 IFLYTEK_API_KEY/SECRET")
   }
 
   const body = {
-    model: "x1",
+    model: "spark-x",
     messages: messages.map((m) => ({ role: m.role, content: m.content })),
     stream: false,
     temperature,
@@ -137,7 +137,7 @@ export async function chatSparkX1Http({
     user: "GoodActionHub",
   }
 
-  const resp = await fetch("https://spark-api-open.xf-yun.com/v2/chat/completions", {
+  const resp = await fetch("https://spark-api-open.xf-yun.com/v1/chat/completions", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
