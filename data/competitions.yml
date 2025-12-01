@@ -387,6 +387,7 @@
       timezone: Asia/Shanghai
       date: 2025年10月19日
       place: 千山区对桩石站
+
 - title: 创建助力'百千万'——广东省精神文明建设公益广告设计大赛
   description: 由广东省精神文明建设办公室、南方报业传媒集团联合主办的公益广告设计大赛，旨在通过创意设计传播文明理念，赋能"百县千镇万村高质量发展工程"，引导广大群众讲文明、树新风。大赛紧扣"助力'百千万工程'""活力十五运会""建设绿美广东""传承岭南文化""弘扬文明乡风"等五大主题方向，面向全社会征集遴选具有时代性、地域性、创新性的精神文明建设公益广告作品。
   category: competition
@@ -411,7 +412,7 @@
       date: 2025年9月29日 - 12月31日
       place: 广东省（线上征集）
 
-- title: "淄博齐惠保"
+- title: 2025淄博"齐惠保"公益马拉松
   description: 由淄博齐惠保项目组主办的公益马拉松活动，旨在为淄博市困难群众募集"齐惠保"保障资金，守护他们家庭的健康和希望。参与者捐1元即可报名参赛，通过每日走满3600步完成马拉松挑战，获得腾讯公益证书和公益马拉松电子徽章，还能抽奖赢取"淄博齐惠保"文创徽章。每有一位参与者完成挑战，项目组将配捐1元公益金。
   category: competition
   tags:
@@ -623,3 +624,125 @@
       timezone: Asia/Shanghai
       date: 2025年6月1日 - 12月31日
       place: 兰州市及甘肃省各地
+
+- title: Empire Code Technovation Girls 2026 | 新加坡女生科技创新竞赛培训
+  description: Empire Code举办的Technovation Girls 2026竞赛培训项目，专为8-16岁女孩设计的国际科技创新与创业竞赛。参与者将组成4-5人团队，设计和开发解决现实世界问题的移动应用程序，并进行全球展示。竞赛包含应用创建和在线提交，涵盖编程、商业计划制定、投资推介等技能学习。Empire Code作为新加坡专业编程培训机构，在诺维纳校区和河谷校区提供14次课程（30小时）的专业培训，从2026年1月12日开始。培训项目包括MOE注册培训师指导，涵盖AI、MIT App Inventor和国际竞赛经验。2025年，Empire Code团队在Technovation Girls全球半决赛中脱颖而出，展现了学生的国际竞争力。该项目为女孩提供STEM技能、创新经验和DSA申请作品集证据。
+  category: activity
+  tags:
+    - 女生科技
+    - 创新竞赛
+    - 编程培训
+    - 移动应用开发
+    - STEM教育
+    - 新加坡
+    - Empire Code
+    - 青少年教育
+    - 科技创业
+    - 全球竞赛
+    - MIT App Inventor
+    - 性别多元化
+  events:
+    - year: 2026
+      id: empire-code-technovation-2026
+      link: https://empirecode.co/technovation-2026/
+      timeline:
+        - deadline: 2025-12-31T23:59:59
+          comment: 报名截止时间
+        - deadline: 2026-01-12T00:00:00
+          comment: 培训课程开始
+        - deadline: 2026-04-20T17:00:00
+          comment: 项目提交截止
+        - deadline: 2026-10-31T23:59:59
+          comment: 世界峰会（入围者邀请制）
+      timezone: Asia/Shanghai
+      date: 2025年12月-2026年10月
+      place: 新加坡诺维纳校区和河谷校区
+
+- title: GeeksforGeeks Women Code to Win 2025 | 女性编程竞赛
+  description: GeeksforGeeks Women Code to Win 2025是专门为女性开发者举办的编程竞赛，旨在促进技术领域的性别多元化，为女性程序员提供展示编程技能的平台。该竞赛面向全球女性开发者开放，涵盖算法、数据结构、问题解决等多个技术领域。参赛者将面对一系列编程挑战，通过解决实际问题来展示自己的技术能力。竞赛不仅提供丰厚的奖品，还为参赛者提供与行业专家交流、获得职业指导的机会。GeeksforGeeks作为知名的技术教育平台，通过举办此类竞赛致力于打破技术行业的性别壁垒，鼓励更多女性参与到编程和技术创新中来，为女性技术人才的职业发展创造更多机会。
+  category: activity
+  tags:
+    - 编程竞赛
+    - 女性开发者
+    - 算法挑战
+    - 数据结构
+    - 技术教育
+    - 性别多元化
+    - 编程技能
+    - 问题解决
+    - 职业发展
+    - 技术创新
+    - 全球竞赛
+    - 女性程序员
+  events:
+    - year: 2025
+      id: geeksforgeeks-women-code-to-win-2025
+      link: https://www.geeksforgeeks.org/hack-a-thon/women-code-to-win-2025
+      timeline:
+        - deadline: 2025-12-31T23:59:59
+          comment: 竞赛持续进行中
+      timezone: Asia/Shanghai
+      date: 2025年全年
+      place: 线上竞赛平台
+
+- title: Technovation Girls 全球挑战赛 | 女生科技创新与创业竞赛
+  description: Technovation Girls是一个面向8-18岁女孩、非二元性别和跨性别参与者的全球性科技创新与创业竞赛。该竞赛每年从8月持续到次年4月，参与者组成团队，利用技术开发解决社区问题的创新方案，学习编程、商业计划制定和投资推介等技能。竞赛完全免费，参与者可以通过当地的Technovation分会或俱乐部参与，也可以虚拟独立参与。项目提交截止日期为2026年4月20日下午5点（太平洋时间）。竞赛分为学生参与、成人志愿者指导、项目领导者组织和合作伙伴支持四个维度，旨在培养下一代女性科技领袖，提升女孩在STEM领域的参与度和自信心，通过技术创新解决现实社会问题。
+  category: activity
+  tags:
+    - 女生科技
+    - 创新竞赛
+    - 编程学习
+    - 创业教育
+    - STEM教育
+    - 全球竞赛
+    - 社区创新
+    - 技术创业
+    - 青少年教育
+    - 性别平等
+    - 科技领袖
+    - 社会创新
+  events:
+    - year: 2025
+      id: technovation-girls-2026
+      link: https://technovationchallenge.org/get-involved/
+      timeline:
+        - deadline: 2025-08-01T00:00:00
+          comment: 2026赛季开始报名
+        - deadline: 2026-03-31T23:59:59
+          comment: 报名截止
+        - deadline: 2026-04-20T17:00:00
+          comment: 项目提交截止
+      timezone: Asia/Shanghai
+      date: 2025年8月-2026年4月
+      place: 全球线上及线下分会
+
+- title: HackHERS 2026 | 罗格斯大学女性主题黑客马拉松
+  description: HackHERS是罗格斯大学举办的面向女性的黑客马拉松活动，旨在通过技术活动缩小性别差距。虽然活动面向所有性别开放，但其核心使命是鼓励更多女性参与技术领域。该活动为期两天，在新泽西州新不伦瑞克罗格斯大学College Avenue Student Center举行。活动完全免费，为初学者提供友好的学习环境，包括全天的工作坊、志愿者和导师现场答疑等支持。参与者可以组成最多4人的团队，在活动中学习编程、构建项目。活动强调多元化团队的重要性，认为缩小技术行业性别差距需要所有人的共同参与。
+  category: competition
+  tags:
+    - 女性黑客马拉松
+    - 编程竞赛
+    - 技术教育
+    - 性别多元化
+    - 罗格斯大学
+    - 新泽西州
+    - 初学者友好
+    - 团队合作
+    - 技术社区
+    - 免费活动
+    - 工作坊
+    - 导师指导
+  events:
+    - year: 2026
+      id: ruther-hackhers-2026
+      link: https://ruhackhers.org/
+      timeline:
+        - deadline: 2026-02-07T23:59:59
+          comment: 黑客申请截止（活动前一周）
+        - deadline: 2026-02-14T09:00:00
+          comment: 黑客马拉松开始
+        - deadline: 2026-02-15T17:00:00
+          comment: 黑客马拉松结束
+      timezone: America/New_York
+      date: 2026年2月14-15日
+      place: 美国新泽西州新不伦瑞克罗格斯大学College Avenue Student Center

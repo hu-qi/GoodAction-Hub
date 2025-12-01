@@ -941,3 +941,249 @@
       timezone: Asia/Shanghai
       date: 2025年10月17日（周五）
       place: 北京（具体地址待通知）
+- title: GirlScript Summer of Code 2025 | 开源贡献与学习的新纪元
+  description: GirlScript Summer of Code是GirlScript基金会举办的为期3个月的开源项目，旨在帮助初学者开始开源开发，同时鼓励多元化。在整个项目期间，参与者在经验丰富的导师指导下为不同的项目做出贡献。顶尖参与者将获得令人兴奋的礼品和机会。GirlScript基金会成立于2017年，致力于让优质教育惠及所有人，已建立一个包含50多万学习者的活跃社区。该项目专注于技能发展、指导和职业指导，弥合教育与职场之间的差距。
+  category: activity
+  tags:
+    - 开源项目
+    - 编程学习
+    - GirlScript基金会
+    - 代码贡献
+    - 导师指导
+    - 职业发展
+    - 技术社区
+    - 多元化
+    - 开源开发
+    - 学习机会
+    - 技能发展
+    - 职业指导
+  events:
+    - year: 2025
+      id: gssoc-2025
+      link: https://gssoc.girlscript.tech/#apply
+      timeline:
+        - deadline: 2025-06-20T00:00:00
+          comment: 导师项目分配
+        - deadline: 2025-06-23T00:00:00
+          comment: 社区交流期开始
+        - deadline: 2025-12-01T23:59:59
+          comment: 编码期结束
+      timezone: Asia/Shanghai
+      date: 2025年6月-12月
+      place: 线上项目
+
+- title: Blackhoodie 安全培训 | 女性逆向工程与二进制利用工作坊
+  description: Blackhoodie是一个专注于为女性提供网络安全技术培训的国际性社区组织。该组织将于2026年春季在比利时哈塞尔特CORDA CAMPUS举办为期一天的安全培训活动，作为BSides Limburg会议的配套活动。培训内容涵盖逆向工程和二进制利用的基础知识，包括Intel x86-64二进制文件逆向分析、缓冲区溢出漏洞利用、ELF二进制文件分析、命令行工具使用、反汇编器和反编译器应用等。培训面向对逆向工程和底层漏洞利用感兴趣的女性，要求具备基本的C语言和Python编程经验，熟悉Linux命令行操作。活动提供免费培训和餐饮，由女性讲师授课，旨在为女性创造更多进入网络安全领域的机会，促进技术行业的性别多元化发展。
+  category: activity
+  tags:
+    - 网络安全
+    - 逆向工程
+    - 二进制利用
+    - 女性培训
+    - 安全社区
+    - 漏洞利用
+    - 编程基础
+    - Linux系统
+    - 安全会议
+    - 技术教育
+    - 性别多元化
+    - 比利时
+  events:
+    - year: 2026
+      id: blackhoodie-bsides-limburg-2026
+      link: https://blackhoodie.re/BSidesLimburg2026/
+      timeline:
+        - deadline: 2026-03-12T09:00:00
+          comment: 培训活动开始
+        - deadline: 2026-03-12T17:00:00
+          comment: 培训活动结束
+      timezone: Asia/Shanghai
+      date: 2026年3月12日
+      place: 比利时哈塞尔特CORDA CAMPUS
+- title: Women Who Code 技术峰会 | 全球女性开发者社区活动
+  description: Women Who Code是一个全球性非营利组织，致力于帮助女性在技术职业生涯中取得卓越成就。该组织通过提供编程资源、职业发展机会和社区支持，已经在全球建立了强大的技术女性网络。Women Who Code定期举办技术峰会、编程工作坊、职业发展活动等，为女性开发者提供学习新技术、建立人脉、提升技能的平台。参与者可以通过技术分享、项目展示、导师指导等方式，获得宝贵的职业发展机会。该组织特别关注技术行业的性别多元化，致力于打破技术领域的性别壁垒，为更多女性创造进入和成长于技术行业的机会。
+  category: activity
+  tags:
+    - 女性开发者
+    - 技术峰会
+    - 编程社区
+    - 职业发展
+    - 技术教育
+    - 性别多元化
+    - 全球社区
+    - 技术女性
+    - 编程工作坊
+    - 导师指导
+    - 技能提升
+    - 技术网络
+  events:
+    - year: 2025
+      id: women-who-code-summit-2025
+      link: https://womenwhocode.com/
+      timeline:
+        - deadline: 2025-12-31T23:59:59
+          comment: 年度社区活动持续进行
+      timezone: Asia/Shanghai
+      date: 2025年全年
+      place: 全球线上及线下活动
+
+- title: Outreachy 实习计划 | 支持技术行业多元化的开源实习
+  description: Outreachy 提供开源领域的实习机会，面向在技术行业中面临代表性不足、系统性偏见或歧视的任何背景人士。Outreachy 实习具有带薪（7,000 美元总实习津贴）、远程（实习生和导师都远程工作）、为期3个月（实习期为5月至8月或12月至3月）等特点。实习项目涵盖编程、研究、用户体验、文档、图形设计、数据科学、市场营销、用户推广、活动策划等多个领域。Outreachy 的目标是增加开源领域的多样性，过去参与者中92%为女性，64%为有色人种，12%来自历史上处于不利地位的种姓或部落。
+  category: activity
+  tags:
+    - 开源实习
+    - 技术多元化
+    - 带薪实习
+    - 远程工作
+    - 编程学习
+    - 用户体验
+    - 文档编写
+    - 数据科学
+    - 市场营销
+    - 活动策划
+    - 职业发展
+    - 包容性
+  events:
+    - year: 2025
+      id: outreachy-june-2025
+      link: https://www.outreachy.org/
+      timeline:
+        - deadline: 2025-02-07T00:00:00
+          comment: 实习生申请开始
+        - deadline: 2025-02-15T23:59:59
+          comment: 实习生申请截止
+        - deadline: 2025-03-17T00:00:00
+          comment: 项目贡献期开始
+        - deadline: 2025-04-15T23:59:59
+          comment: 项目贡献期结束
+        - deadline: 2025-06-02T00:00:00
+          comment: 实习期开始
+        - deadline: 2025-08-29T23:59:59
+          comment: 实习期结束
+      timezone: Asia/Shanghai
+      date: 2025年2月-8月
+      place: 全球远程实习
+- title: Google 编程之夏 2025 | Google Summer of Code
+  description: Google Summer of Code（GSoC）是Google举办的开源贡献者计划，旨在帮助开发者在重要的开源项目中获得实际编码经验。该项目每年吸引全球数万名申请者参与，为开源项目贡献代码。2025年时间表包括：1月27日指导组织开始申请，2月11日组织申请截止，3月24日贡献者申请期开始，4月8日贡献者申请截止，6月2日正式开始编码，项目持续时间可为8-22周。GSoC为参与者提供津贴，让他们能够在导师指导下为开源项目做出实质性贡献，同时学习软件开发的实际技能。
+  category: activity
+  tags:
+    - 开源项目
+    - Google编程之夏
+    - 代码贡献
+    - 编程学习
+    - 导师指导
+    - 技术社区
+    - 职业发展
+    - 全球项目
+    - 软件开发
+    - 实践经验
+    - 技术教育
+    - 开源贡献
+  events:
+    - year: 2025
+      id: google-summer-of-code-2025
+      link: https://developers.google.com/open-source/gsoc/timeline?hl=zh-cn
+      timeline:
+        - deadline: 2025-01-27T18:00:00
+          comment: 指导组织开始申请
+        - deadline: 2025-02-11T18:00:00
+          comment: 指导组织申请截止
+        - deadline: 2025-03-24T18:00:00
+          comment: 贡献者申请期开始
+        - deadline: 2025-04-08T18:00:00
+          comment: 贡献者申请截止
+        - deadline: 2025-06-02T00:00:00
+          comment: 编码正式开始
+        - deadline: 2025-11-17T18:00:00
+          comment: 项目评估最终截止
+      timezone: Asia/Shanghai
+      date: 2025年1月-11月
+      place: 全球线上项目
+- title: MLH Fellowship 2026春季 | 软件工程奖学金项目
+  description: Major League Hacking (MLH) Fellowship是一个实践学习项目，旨在帮助 aspiring technologists 获得实际技能。每年有超过135,000名技术爱好者参与MLH活动，学习帮助他们在职场成功、创业等所需的技能。MLH Fellowship包含多个项目，通过将教育和有趣的内容与实践经验相结合，让学习变得简单、有趣且快速。无论你是想建立个人项目组合、完善你热衷的项目，还是开始为开源做贡献，都有适合你的项目。申请过程大约需要30-45分钟完成，你可以随时保存进度并在未来继续。
+  category: activity
+  tags:
+    - 软件工程
+    - 编程奖学金
+    - 实践学习
+    - 开源贡献
+    - 技术社区
+    - 职业发展
+    - Major League Hacking
+    - 个人项目
+    - 技能发展
+    - 技术教育
+    - 在线学习
+    - 编程实践
+  events:
+    - year: 2026
+      id: mlh-fellowship-spring-2026
+      link: https://www.tfaforms.com/4956119
+      timeline:
+        - deadline: 2026-01-02T23:59:59
+          comment: 申请截止时间（所有地区）
+        - deadline: 2026-01-26T00:00:00
+          comment: 项目开始时间
+      timezone: Asia/Shanghai
+      date: 2026年1月26日开始
+      place: 线上项目
+- title: Wise Women Code | 全球女性与非二元性别者技术职业发展项目
+  description: Wise Women Code是Wise推出的获奖项目，旨在为女性和非二元性别者提供进入技术行业的机会。这个为期3天的沉浸式体验项目包含宝贵的见解、实践工作坊和交流机会，旨在增强参与者的信心，帮助探索金融科技行业内的不同工程路径。2026年，该项目将在新加坡、伦敦、塔林和布达佩斯举办。参与者将获得技术技能信心提升、建立志同道合者的支持网络、了解技术领域多样化的职业路径、揭开技术和工程世界神秘面纱的机会。Wise坚信多元化和包容性对创新和进步至关重要，致力于支持女性和非二元性别者在技术世界中取得成功。
+  category: activity
+  tags:
+    - 女性编程
+    - 非二元性别
+    - 技术职业
+    - 金融科技
+    - 工程路径
+    - 实践工作坊
+    - 职业发展
+    - 技术教育
+    - 多元化
+    - 包容性
+    - 全球项目
+    - 技术社区
+  events:
+    - year: 2026
+      id: wise-women-code-2026
+      link: https://wise.jobs/wise-women-code
+      timeline:
+        - deadline: 2026-01-01T00:00:00
+          comment: 项目申请开放
+        - deadline: 2026-12-31T23:59:59
+          comment: 项目持续进行
+      timezone: Asia/Shanghai
+      date: 2026年全年
+      place: 新加坡、伦敦、塔林、布达佩斯
+- title: Empire Code Technovation Girls 2026 | 新加坡女孩编程技术训练营
+  description: Empire Code举办的Technovation Girls 2026项目，专为年轻女孩设计的编程和技术创新训练营。该项目旨在通过实践项目培养女孩的编程技能、创新思维和创业精神，帮助她们在技术领域建立信心并探索未来职业发展方向。项目包含移动应用开发、商业计划制定、演讲技巧培训等多个模块，参与者将学习如何识别现实问题、设计技术解决方案并创建完整的商业计划。Empire Code致力于通过教育科技赋能年轻女性，为她们提供在技术行业取得成功所需的技能和知识。
+  category: activity
+  tags:
+    - 女孩编程
+    - 技术创新
+    - 移动应用开发
+    - 创业精神
+    - 商业计划
+    - 演讲技巧
+    - 编程教育
+    - 女性科技
+    - 实践项目
+    - 创新思维
+    - 职业发展
+    - 新加坡教育
+  events:
+    - year: 2026
+      id: empire-code-technovation-girls-2026
+      link: https://empirecode.co/technovation-2026/
+      timeline:
+        - deadline: 2026-01-15T00:00:00
+          comment: 项目申请开始
+        - deadline: 2026-03-31T23:59:59
+          comment: 项目申请截止
+        - deadline: 2026-04-15T00:00:00
+          comment: 项目正式启动
+        - deadline: 2026-08-31T23:59:59
+          comment: 项目结束和成果展示
+      timezone: Asia/Shanghai
+      date: 2026年4月15日至2026年8月31日
+      place: 新加坡
