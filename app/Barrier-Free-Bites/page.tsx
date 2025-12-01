@@ -556,7 +556,7 @@ export default function BarrierFreeBitesPage() {
             </div>
 
             {/* 无声饭店（云南玉溪） */}
-            <div className={`restaurant-card ${isVisible(['hearing','cognitive']) ? '' : 'hidden'}`} data-accessibility="hearing cognitive">
+            <div className={`restaurant-card ${isVisible('hearing') ? '' : 'hidden'}`} data-accessibility="hearing">
               <div className="card-header">
                   <h2 className="restaurant-name"><SafeTranslation tKey="bites.restaurants.silent_yuxi.name" fallback="无声饭店" /></h2>
                   <div className="accessibility-tags">
@@ -564,10 +564,7 @@ export default function BarrierFreeBitesPage() {
                       <span className="icon">👂</span>
                       <SafeTranslation tKey="bites.tags.hearing" fallback="听障友好" />
                     </span>
-                    <span className="tag">
-                      <span className="icon">🧠</span>
-                      <SafeTranslation tKey="bites.tags.cognitive" fallback="认知友好" />
-                    </span>
+                    {/* 移除认知友好标签 */}
                   </div>
                 </div>
               <div className="card-body">
