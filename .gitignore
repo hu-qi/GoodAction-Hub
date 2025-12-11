@@ -46,3 +46,34 @@ next-env.d.ts
 # VSCode
 .vscode/
 .env*.local
+
+# Security - prevent credential leaks
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+config.json
+config.yml
+credentials.json
+service-account.json
+
+# Cloud provider credentials
+.aws/
+.azure/
+.gcloud/
+huawei-cloud-*.json
+huawei_cloud_*.json
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+
+# Backup files
+*.bak
+*.backup
+*.old
+.vscode/
+.env*.local
