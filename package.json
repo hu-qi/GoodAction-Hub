@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "build:static": "set COREPACK_ENABLE_AUTO_PIN=0 && next build",
+    "build:static": "NEXT_OUTPUT=export COREPACK_ENABLE_AUTO_PIN=0 next build",
     "build:github": "next build",
     "build:huawei": "npm run build:static",
     "build:netlify": "next build",
